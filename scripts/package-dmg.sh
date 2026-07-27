@@ -74,5 +74,16 @@ if [[ -n "${DMG_SIGN_IDENTITY:-}" && "${DMG_SIGN_IDENTITY:-}" != "-" ]]; then
   codesign --force --timestamp --sign "$DMG_SIGN_IDENTITY" "$DMG_PATH"
 fi
 
-hdiutil verify "$DMG_PATH"
+sync
+for attempt in 1 2 3 4 5; do
+  if hdiutil verify "$DMG_PATH"; then
+    break
+  fi
+  if [[ "$attempt" == "5" ]]; then
+    echo "DMG verification failed after $attempt attempts: $DMG_PATH" >&2
+    exit 1
+  fi
+  echo "DMG is not ready for verification yet; retrying ($attempt/5)..." >&2
+  sleep 3
+done
 echo "Created $DMG_PATH"
