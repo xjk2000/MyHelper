@@ -118,6 +118,14 @@ make release-all
 
 Artifacts are written to `dist/`. See [DISTRIBUTION.md](DISTRIBUTION.md) for Developer ID signing and notarization.
 
+You can also package from the GitHub web UI:
+
+1. Open **Actions** in the repository.
+2. Select **Build macOS DMG**.
+3. Click **Run workflow**.
+4. Choose `arm64` or `x86_64`.
+5. Download the DMG from workflow Artifacts, or enable Release publishing to upload it to GitHub Releases.
+
 ## Privacy And Security
 
 - The repository does not include API keys, GitLab tokens, OAuth tokens, 2FA secrets, or account data.

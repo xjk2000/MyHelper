@@ -1,0 +1,117 @@
+name: Build macOS DMG
+
+on:
+  workflow_dispatch:
+    inputs:
+      architecture:
+        description: "DMG architecture"
+        required: true
+        default: "arm64"
+        type: choice
+        options:
+          - arm64
+          - x86_64
+      publish_release:
+        description: "Create or update a GitHub Release with the DMG"
+        required: true
+        default: false
+        type: boolean
+      release_tag:
+        description: "Release tag, for example v1.0.0-beta02. Leave empty to use Info.plist version."
+        required: false
+        default: ""
+        type: string
+      prerelease:
+        description: "Mark the GitHub Release as prerelease"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+jobs:
+  build-dmg:
+    name: Build ${{ inputs.architecture }} DMG
+    runs-on: macos-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show toolchain
+        run: |
+          sw_vers
+          xcodebuild -version
+          swift --version
+
+      - name: Resolve build metadata
+        id: meta
+        shell: bash
+        run: |
+          VERSION=$(/usr/libexec/PlistBuddy -c "Print CFBundleShortVersionString" Resources/Info.plist)
+          ARCH="${{ inputs.architecture }}"
+          case "$ARCH" in
+            arm64)
+              TARGET_TRIPLE="arm64-apple-macos14.0"
+              ;;
+            x86_64)
+              TARGET_TRIPLE="x86_64-apple-macos14.0"
+              ;;
+            *)
+              echo "Unsupported architecture: $ARCH" >&2
+              exit 2
+              ;;
+          esac
+
+          TAG="${{ inputs.release_tag }}"
+          if [[ -z "$TAG" ]]; then
+            TAG="v$VERSION"
+          fi
+
+          {
+            echo "version=$VERSION"
+            echo "arch=$ARCH"
+            echo "target_triple=$TARGET_TRIPLE"
+            echo "tag=$TAG"
+            echo "artifact_name=MyHelper-$VERSION-mac-$ARCH"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build DMG and checksum
+        run: |
+          make clean-dist
+          make checksum TARGET_TRIPLE="${{ steps.meta.outputs.target_triple }}"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.meta.outputs.artifact_name }}
+          path: |
+            dist/*.dmg
+            dist/*.dmg.sha256
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish GitHub Release
+        if: ${{ inputs.publish_release }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.meta.outputs.tag }}
+          VERSION: ${{ steps.meta.outputs.version }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        shell: bash
+        run: |
+          FLAGS=()
+          if [[ "$PRERELEASE" == "true" ]]; then
+            FLAGS+=(--prerelease)
+          fi
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" dist/*.dmg dist/*.dmg.sha256 --clobber
+          else
+            gh release create "$TAG" dist/*.dmg dist/*.dmg.sha256 \
+              --title "MyHelper $VERSION" \
+              --notes "Automated macOS DMG build from GitHub Actions." \
+              "${FLAGS[@]}"
+          fi

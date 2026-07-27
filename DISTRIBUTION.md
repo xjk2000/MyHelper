@@ -65,6 +65,29 @@ make release
 
 This creates the DMG and a `SHA-256` checksum file next to it.
 
+## Build from GitHub Actions
+
+The repository includes a manual workflow for packaging from the GitHub web UI:
+
+1. Open the repository on GitHub.
+2. Go to **Actions**.
+3. Select **Build macOS DMG**.
+4. Click **Run workflow**.
+5. Choose `arm64` or `x86_64`.
+6. Leave **Create or update a GitHub Release** unchecked if you only want a downloadable workflow artifact.
+7. Check it and provide a tag such as `v1.0.0-beta02` if you want the DMG uploaded to GitHub Releases.
+
+The workflow writes:
+
+```text
+dist/MyHelper-<version>-mac-<arch>.dmg
+dist/MyHelper-<version>-mac-<arch>.dmg.sha256
+```
+
+The default GitHub Actions build uses ad-hoc signing. It is useful for internal
+testing, but other Macs may still show a Gatekeeper warning until a Developer ID
+signed and notarized release pipeline is configured.
+
 ## Developer ID signed build
 
 For broad distribution outside the App Store, sign with a Developer ID Application certificate:

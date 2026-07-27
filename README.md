@@ -120,6 +120,14 @@ make release-all
 
 产物会写入 `dist/`。Developer ID 签名和 Apple notarization 流程见 [DISTRIBUTION.md](DISTRIBUTION.md)。
 
+也可以在 GitHub 页面手动打包：
+
+1. 打开仓库的 **Actions**。
+2. 选择 **Build macOS DMG**。
+3. 点击 **Run workflow**。
+4. 选择 `arm64` 或 `x86_64`。
+5. 打包完成后从 workflow 的 Artifacts 下载 DMG；如果勾选发布 Release，会自动上传到 GitHub Releases。
+
 ## 隐私和安全
 
 - 不提交、不内置任何 API Key、GitLab Token、OAuth Token、2FA 密钥或账号数据。
