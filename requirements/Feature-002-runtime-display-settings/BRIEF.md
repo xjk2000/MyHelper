@@ -6,7 +6,7 @@
 | 优先级     | P1         |
 | 负责人     | <待填>     |
 | 目标日期   | <待填>     |
-| 涉及子系统 | Sources/CodexUsageWidget, docs, Resources |
+| 涉及子系统 | Sources/MyHelper, docs, Resources |
 
 ## 一句话描述
 
@@ -14,7 +14,7 @@
 
 ## 背景
 
-codexU 已从单一 Codex 统计扩展到 Codex 与 Claude Code 两个 Runtime。默认同时展示两者可以让新用户直接感知多 Runtime 能力，但实际使用中，用户可能只使用 Codex、只使用 Claude Code，或希望暂时隐藏某个 Runtime 来减少界面干扰。
+MyHelper 已从单一 Codex 统计扩展到 Codex 与 Claude Code 两个 Runtime。默认同时展示两者可以让新用户直接感知多 Runtime 能力，但实际使用中，用户可能只使用 Codex、只使用 Claude Code，或希望暂时隐藏某个 Runtime 来减少界面干扰。
 
 如果展示范围不能配置，菜单栏 Runtime 浮窗、主窗口顶部 Runtime 切换、趋势/项目/工具等面板都会持续出现用户不关心的 Runtime。1.0.1 需要补齐一个轻量设置项，让用户控制哪些 Runtime 出现在 UI 中，同时通过“至少选择一个”的约束避免应用进入无可展示数据范围的状态。
 

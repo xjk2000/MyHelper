@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760" role="img" aria-labelledby="title desc">
-  <title id="title">codexU main window with runtime selector</title>
-  <desc id="desc">The codexU main widget with a global Codex and Claude Code segmented runtime switch in the header.</desc>
+  <title id="title">MyHelper main window with runtime selector</title>
+  <desc id="desc">The MyHelper main widget with a global Codex and Claude Code segmented runtime switch in the header.</desc>
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0" stop-color="#210776"/>
@@ -37,7 +37,7 @@
     <rect x="11" y="15" width="22" height="15" rx="7" fill="#7866FF"/>
     <circle cx="17" cy="22" r="4" fill="#48A6FF"/>
     <circle cx="26" cy="22" r="4" fill="#FF9D2E"/>
-    <text x="58" y="30" fill="#070111" font-family="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif" font-size="29" font-weight="800">codexU</text>
+    <text x="58" y="30" fill="#070111" font-family="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif" font-size="29" font-weight="800">MyHelper</text>
 
     <rect x="360" y="6" width="244" height="36" rx="11" fill="#EFE3FF" opacity="0.58"/>
     <rect x="365" y="11" width="111" height="26" rx="8" fill="#0B8DFF"/>

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="520" height="680" viewBox="0 0 520 680" role="img" aria-labelledby="title desc">
-  <title id="title">codexU status bar runtime menu</title>
+  <title id="title">MyHelper status bar runtime menu</title>
   <desc id="desc">A macOS status bar popover with Codex and Claude Code runtime cards, showing 5-hour quota, 7-day quota, and today's token usage.</desc>
   <defs>
     <linearGradient id="pageBg" x1="0" y1="0" x2="1" y2="1">
@@ -31,7 +31,7 @@
   <text x="28" y="24" fill="#2C2252" font-family="-apple-system, BlinkMacSystemFont, SF Pro Text, sans-serif" font-size="13" font-weight="600">Finder</text>
   <circle cx="388" cy="19" r="7" fill="#7E5BFF" opacity="0.82"/>
   <rect x="406" y="11" width="42" height="16" rx="8" fill="#7E5BFF" opacity="0.18"/>
-  <text x="418" y="23" fill="#2C2252" font-family="-apple-system, BlinkMacSystemFont, SF Pro Text, sans-serif" font-size="11" font-weight="700">codexU</text>
+  <text x="418" y="23" fill="#2C2252" font-family="-apple-system, BlinkMacSystemFont, SF Pro Text, sans-serif" font-size="11" font-weight="700">MyHelper</text>
   <text x="464" y="24" fill="#2C2252" font-family="-apple-system, BlinkMacSystemFont, SF Pro Text, sans-serif" font-size="12" font-weight="600">02:27</text>
 
   <path d="M420 38 L404 58 L436 58 Z" fill="#F1E6FF" opacity="0.92"/>
@@ -42,7 +42,7 @@
     <rect x="8" y="12" width="20" height="14" rx="7" fill="#7866FF"/>
     <circle cx="14" cy="19" r="4" fill="#48A6FF"/>
     <circle cx="22" cy="19" r="4" fill="#FF9D2E"/>
-    <text x="48" y="22" fill="#130C2A" font-family="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif" font-size="22" font-weight="750">codexU</text>
+    <text x="48" y="22" fill="#130C2A" font-family="-apple-system, BlinkMacSystemFont, SF Pro Display, sans-serif" font-size="22" font-weight="750">MyHelper</text>
     <text x="214" y="14" fill="#5A4D7D" font-family="-apple-system, BlinkMacSystemFont, SF Pro Text, sans-serif" font-size="10" font-weight="600">刷新 02:27</text>
     <rect x="290" y="2" width="38" height="30" rx="9" fill="#FFFFFF" opacity="0.45"/>
     <text x="303" y="22" fill="#5A4D7D" font-family="-apple-system, BlinkMacSystemFont, SF Pro Text, sans-serif" font-size="15" font-weight="700">↻</text>

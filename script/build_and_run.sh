@@ -12,7 +12,6 @@ APP_BINARY="$APP_BUNDLE/Contents/MacOS/$APP_NAME"
 cd "$ROOT_DIR"
 
 pkill -x "$APP_NAME" >/dev/null 2>&1 || true
-pkill -x "codexU" >/dev/null 2>&1 || true
 
 make build
 

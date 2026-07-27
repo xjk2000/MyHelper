@@ -16,6 +16,6 @@
 
 ## 开放问题
 
-- Claude Code statusLine 快照桥接是否由 codexU 自动安装，还是只读取用户自行配置的缓存文件？
+- Claude Code statusLine 快照桥接是否由 MyHelper 自动安装，还是只读取用户自行配置的缓存文件？
 - 跨 Runtime 汇总默认是否显示路径尾名，还是仅展示脱敏后的项目名？
 - Claude Code 第三方模型或路由模型的 API 等效价值是否允许用户配置价格表？

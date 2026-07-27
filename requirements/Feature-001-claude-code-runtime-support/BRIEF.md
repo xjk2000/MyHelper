@@ -6,15 +6,15 @@
 | 优先级     | P0         |
 | 负责人     | <待填>     |
 | 目标日期   | <待填>     |
-| 涉及子系统 | Sources/CodexUsageWidget, docs, Resources |
+| 涉及子系统 | Sources/MyHelper, docs, Resources |
 
 ## 一句话描述
 
-将 codexU 从单一 Codex 用量小组件升级为可接入 Codex、Claude Code 等多 Agent Runtime 的本地统计框架。
+将 MyHelper 从单一 Codex 用量小组件升级为可接入 Codex、Claude Code 等多 Agent Runtime 的本地统计框架。
 
 ## 背景
 
-当前 codexU 的读取、聚合、定价、任务看板和 UI 命名都围绕 Codex 单一 Runtime 展开。新增 Claude Code 支持时，如果继续在同一套 `CodexUsageReader` 和 SwiftUI 视图中追加条件分支，会快速形成耦合：数据源路径、账户额度语义、token 结构、任务模型、工具/Skill 归因和错误提示都会互相影响。
+当前 MyHelper 的读取、聚合、定价、任务看板和 UI 命名都围绕 Codex 单一 Runtime 展开。新增 Claude Code 支持时，如果继续在同一套 `CodexUsageReader` 和 SwiftUI 视图中追加条件分支，会快速形成耦合：数据源路径、账户额度语义、token 结构、任务模型、工具/Skill 归因和错误提示都会互相影响。
 
 Claude Code 本地也具备用量统计基础：`~/.claude/projects/**/*.jsonl` 保存会话 transcript 和 per-message usage，`~/.claude/stats-cache.json` 保存 `/usage` 聚合缓存，`statusLine` 可暴露 active session 的 context、cost、rate limit、worktree 和 PR 信息。它与 Codex 的差异在于：没有等价的后台 `app-server account/*` 接口，额度数据更适合通过 active session 快照桥接；但在工具、Skill、Subagent、Plugin、MCP、文件变更和任务维度上拥有更丰富的本地事件。
 

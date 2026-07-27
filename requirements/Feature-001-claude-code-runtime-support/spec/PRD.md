@@ -9,11 +9,11 @@
 
 ### 1.1 背景
 
-codexU 当前定位是本地 macOS 桌面小组件，用于查看 Codex 额度、token 用量、趋势、项目排行、工具和 Skill 使用。现有实现已经能满足单一 Codex Runtime，但数据模型、读取器、聚合逻辑和 UI 文案都以 Codex 为中心。
+MyHelper 当前定位是本地 macOS 桌面小组件，用于查看 Codex 额度、token 用量、趋势、项目排行、工具和 Skill 使用。现有实现已经能满足单一 Codex Runtime，但数据模型、读取器、聚合逻辑和 UI 文案都以 Codex 为中心。
 
 新增 Claude Code 支持会引入不同的数据语义：Claude Code 的历史 token 来自 `~/.claude/projects/**/*.jsonl`，聚合缓存来自 `~/.claude/stats-cache.json`，active session 的额度、context、cost 和 worktree/PR 信息来自 `statusLine` JSON。它没有与 Codex `app-server account/rateLimits/read` 完全等价的后台账户接口，但拥有更丰富的 Subagent、Plugin、MCP、Task 和 file-history 维度。
 
-因此本 Feature 不应只做“复制一个 ClaudeUsageReader”，而应先把 codexU 重构为多 Agent Runtime 架构：各 Runtime 独立采集和降级，统一输出标准化快照，并在 UI 和 JSON dump 层支持单 Runtime 和跨 Runtime 聚合。
+因此本 Feature 不应只做“复制一个 ClaudeUsageReader”，而应先把 MyHelper 重构为多 Agent Runtime 架构：各 Runtime 独立采集和降级，统一输出标准化快照，并在 UI 和 JSON dump 层支持单 Runtime 和跨 Runtime 聚合。
 
 ### 1.2 产品目标
 
@@ -54,7 +54,7 @@ codexU 当前定位是本地 macOS 桌面小组件，用于查看 Codex 额度�
 - 主界面新增顶部全局 Runtime 开关，用于在 Codex 与 Claude Code 之间手动切换。
 - 更新 `--dump-json` 输出结构，兼容旧字段并新增 runtime 维度。
 - 更新 README、README.en、SECURITY 和 RESEARCH 中的数据源说明。
-- 调整 Makefile，使 `Sources/CodexUsageWidget/**/*.swift` 都参与编译。
+- 调整 Makefile，使 `Sources/MyHelper/**/*.swift` 都参与编译。
 
 ### 2.2 Out of Scope
 
@@ -205,7 +205,7 @@ UI 需要支持：
 
 优先级：P0
 
-点击 macOS 状态栏里的 codexU 图标后，不直接打开主窗口，而是先展示一个状态栏菜单。菜单中包含：
+点击 macOS 状态栏里的 MyHelper 图标后，不直接打开主窗口，而是先展示一个状态栏菜单。菜单中包含：
 
 - Codex 独立卡片。
 - Claude Code 独立卡片。
@@ -261,7 +261,7 @@ UI 需要支持：
 
 菜单信息层级：
 
-1. Header：codexU、最后刷新时间、刷新按钮。
+1. Header：MyHelper、最后刷新时间、刷新按钮。
 2. Runtime 卡片：Codex、Claude Code。
 3. 今日总 token：Codex + Claude Code 的本机 token 合计。
 4. Footer：打开主界面、退出。

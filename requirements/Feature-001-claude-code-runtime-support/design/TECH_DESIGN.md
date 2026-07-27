@@ -10,9 +10,9 @@
 
 ### 1.1 目标与约束
 
-本 Feature 的目标是把 codexU 从单一 Codex 数据读取器重构为多 Agent Runtime 统计框架，并在该框架下新增 Claude Code 支持。重构后的系统需要做到：Codex 与 Claude Code 的文件/API 读取互相独立，公共 UI 只依赖标准化用量模型，聚合层可以合并跨 Runtime 的 token、价值、趋势、项目、工具和 Skill 统计。
+本 Feature 的目标是把 MyHelper 从单一 Codex 数据读取器重构为多 Agent Runtime 统计框架，并在该框架下新增 Claude Code 支持。重构后的系统需要做到：Codex 与 Claude Code 的文件/API 读取互相独立，公共 UI 只依赖标准化用量模型，聚合层可以合并跨 Runtime 的 token、价值、趋势、项目、工具和 Skill 统计。
 
-当前项目是轻量 macOS SwiftUI 应用，构建方式由 `Makefile` 直接调用 `swiftc`，现有 `SOURCES` 只包含 `Sources/CodexUsageWidget/main.swift`。因此本次架构调整必须先改造源码组织与编译入口，再逐步迁移现有 6000 行单文件实现，避免新增 Claude Code 后继续扩大单文件耦合。
+当前项目是轻量 macOS SwiftUI 应用，构建方式由 `Makefile` 直接调用 `swiftc`，现有 `SOURCES` 只包含 `Sources/MyHelper/main.swift`。因此本次架构调整必须先改造源码组织与编译入口，再逐步迁移现有 6000 行单文件实现，避免新增 Claude Code 后继续扩大单文件耦合。
 
 技术约束：
 
@@ -27,20 +27,20 @@
 
 | 应用/包 | 涉及模块 | 变更类型 |
 | --- | --- | --- |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Makefile` | 修改 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/main.swift` | 拆分/瘦身 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/App/` | 新增 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Domain/` | 新增 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/Codex/` | 新增 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/ClaudeCode/` | 新增 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/` | 新增 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/` | 新增 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/StatusBarMenu.swift` | 新增 |
-| codexU macOS app | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/RuntimeSelector.swift` | 新增 |
-| codexU docs | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/README.md` | 修改 |
-| codexU docs | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/README.en.md` | 修改 |
-| codexU docs | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/RESEARCH.md` | 修改 |
-| codexU docs | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/SECURITY.md` | 修改 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Makefile` | 修改 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/main.swift` | 拆分/瘦身 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/App/` | 新增 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Domain/` | 新增 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/Codex/` | 新增 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/ClaudeCode/` | 新增 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/` | 新增 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/` | 新增 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/StatusBarMenu.swift` | 新增 |
+| MyHelper macOS app | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/RuntimeSelector.swift` | 新增 |
+| MyHelper docs | `/Volumes/ORICO/Projects/MyHelper/README.md` | 修改 |
+| MyHelper docs | `/Volumes/ORICO/Projects/MyHelper/README.en.md` | 修改 |
+| MyHelper docs | `/Volumes/ORICO/Projects/MyHelper/RESEARCH.md` | 修改 |
+| MyHelper docs | `/Volumes/ORICO/Projects/MyHelper/SECURITY.md` | 修改 |
 
 ## 2. 系统设计
 
@@ -55,7 +55,7 @@
 
 ```mermaid
 flowchart TD
-    App["codexU App"]
+    App["MyHelper App"]
     Store["AgentUsageStore"]
     Registry["RuntimeProviderRegistry"]
     Aggregator["AgentUsageAggregator"]
@@ -84,9 +84,9 @@ flowchart TD
 建议目录结构：
 
 ```text
-Sources/CodexUsageWidget/
+Sources/MyHelper/
 ├── App/
-│   ├── codexUMain.swift
+│   ├── MyHelperMain.swift
 │   ├── AppDelegate.swift
 │   ├── DesktopWidgetWindow.swift
 │   └── WindowPresentationState.swift
@@ -347,14 +347,14 @@ struct RuntimeMenuSummary: Codable, Equatable {
 
 ### 3.2 本地 cache schema
 
-缓存路径仍使用用户缓存目录下的 `codexU`，按 provider 分离：
+缓存路径仍使用用户缓存目录下的 `MyHelper`，按 provider 分离：
 
 ```text
-~/Library/Caches/codexU/codex/local-analytics-v3.json
-~/Library/Caches/codexU/codex/session-usage-v2.json
-~/Library/Caches/codexU/claude-code/local-analytics-v1.json
-~/Library/Caches/codexU/claude-code/session-usage-v1.json
-~/Library/Caches/codexU/claude-code/statusline-snapshot.json
+~/Library/Caches/MyHelper/codex/local-analytics-v3.json
+~/Library/Caches/MyHelper/codex/session-usage-v2.json
+~/Library/Caches/MyHelper/claude-code/local-analytics-v1.json
+~/Library/Caches/MyHelper/claude-code/session-usage-v1.json
+~/Library/Caches/MyHelper/claude-code/statusline-snapshot.json
 ```
 
 Claude Code session cache:
@@ -383,7 +383,7 @@ Claude Code session cache:
 - 阶段 1 保留旧 Codex cache 文件可读，新 Codex provider cache 使用新路径；无法读取旧 cache 时重新解析，不做复杂迁移。
 - 阶段 2 `--dump-json` 同时输出旧字段和新 `runtimes`/`aggregate` 字段。
 - 阶段 3 后续版本再移除旧 dump 字段，需另行发布说明。
-- 回滚方式：保留 `main.swift` 迁移前行为的 git diff，可恢复 Makefile `SOURCES := Sources/CodexUsageWidget/main.swift` 和旧 `CodexUsageReader`。
+- 回滚方式：保留 `main.swift` 迁移前行为的 git diff，可恢复 Makefile `SOURCES := Sources/MyHelper/main.swift` 和旧 `CodexUsageReader`。
 
 ## 4. API 设计
 
@@ -398,8 +398,8 @@ Claude Code session cache:
 | Swift | `AgentUsageAggregator.aggregate(_:,at:)` | 跨 Runtime 聚合 | `[AgentRuntimeSnapshot]` | `AgentUsageAggregate` |
 | Swift | `AgentUsageStore.selectRuntime(_:)` | 状态栏菜单和主界面 Runtime 开关共用选择入口 | `RuntimeScope` | 无 |
 | Swift | `RuntimeMenuSummaryBuilder.makeSummaries(snapshot:)` | 生成状态栏 Runtime 卡片数据 | `AgentUsageSnapshot` | `[RuntimeMenuSummary]` |
-| CLI | `build/codexU.app/Contents/MacOS/codexU --dump-json` | 输出调试 JSON | 无 | runtime-aware JSON |
-| File | `~/Library/Caches/codexU/claude-code/statusline-snapshot.json` | Claude Code active 快照 | Claude statusLine script 写入 | `ClaudeCodeStatusLineSnapshot` |
+| CLI | `build/MyHelper.app/Contents/MacOS/MyHelper --dump-json` | 输出调试 JSON | 无 | runtime-aware JSON |
+| File | `~/Library/Caches/MyHelper/claude-code/statusline-snapshot.json` | Claude Code active 快照 | Claude statusLine script 写入 | `ClaudeCodeStatusLineSnapshot` |
 
 ### 4.2 `--dump-json` 响应结构
 
@@ -508,30 +508,30 @@ Claude Code session cache:
 
 | 序号 | 任务 | 涉及目录/文件 | 预估工时 | 依赖 |
 | ---- | ---- | ------------- | -------- | ---- |
-| 1 | 改造 Makefile，使所有 Swift 文件参与编译 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Makefile` | 0.25d | 无 |
-| 2 | 创建目录结构与迁移 App 入口/window/hotkey 代码 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/App/codexUMain.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/App/AppDelegate.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/App/DesktopWidgetWindow.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/main.swift` | 0.75d | 1 |
-| 3 | 抽取公共 Domain 模型并保持 Codex 兼容 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Domain/AgentRuntime.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Domain/AgentUsageSnapshot.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Domain/UsageModels.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Domain/TaskModels.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Domain/Diagnostics.swift` | 1d | 1 |
-| 4 | 抽取价格、格式化、解析和文件 fingerprint helper | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Domain/Pricing.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Shared/Formatting.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Shared/Localization.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Shared/ParsingHelpers.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/FileFingerprint.swift` | 0.75d | 3 |
-| 5 | 定义 Provider 协议、Registry、Store、Aggregator | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/RuntimeProvider.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/RuntimeProviderRegistry.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/AgentUsageStore.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/AgentUsageAggregator.swift` | 1d | 3,4 |
-| 6 | 迁移 Codex app-server 与 SQLite 读取 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/Codex/CodexRuntimeProvider.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/Codex/CodexAppServerClient.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/Codex/CodexSQLiteReader.swift` | 1d | 5 |
-| 7 | 迁移 Codex session parser、analytics cache、task reader | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/Codex/CodexSessionParser.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/Codex/CodexTaskReader.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/CacheStore.swift` | 1d | 5,6 |
-| 8 | 实现 Claude Code transcript scanner/parser 与 session cache | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/ClaudeCode/ClaudeCodeRuntimeProvider.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/ClaudeCode/ClaudeCodeTranscriptParser.swift` | 1d | 5 |
-| 9 | 实现 Claude Code stats-cache、global state、task reader | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/ClaudeCode/ClaudeCodeStatsCacheReader.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/ClaudeCode/ClaudeCodeGlobalStateReader.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/ClaudeCode/ClaudeCodeTaskReader.swift` | 0.75d | 8 |
-| 10 | 实现 Claude Code statusLine snapshot reader 和 stale 诊断 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Providers/ClaudeCode/ClaudeCodeStatusLineSnapshotReader.swift` | 0.5d | 8 |
-| 11 | 实现状态栏菜单、Runtime 摘要卡片和卡片点击入口 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/StatusBarMenu.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/RuntimeSummaryCard.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/App/AppDelegate.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/RuntimeMenuSummaryBuilder.swift` | 1d | 5,7,8,10 |
-| 12 | 拆分 SwiftUI 视图并接入主界面 Runtime selector | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/UsageWidgetView.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/RuntimeSelector.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/OverviewSection.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/DashboardTabs.swift` | 1d | 5,7,8,11 |
-| 13 | 迁移 dashboard 面板到 runtime-aware 模型 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/UsageTrendPanel.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/ProjectBoardPanel.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/SkillUsagePanel.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/UI/TaskBoardPanel.swift` | 1d | 12 |
-| 14 | 实现 runtime-aware dump JSON 与兼容输出 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/Services/JSONDumpWriter.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/App/codexUMain.swift` | 0.5d | 5,7,8 |
-| 15 | 更新产品、安全和研究文档 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/README.md`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/README.en.md`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/RESEARCH.md`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/SECURITY.md` | 0.5d | 8,10,11,14 |
-| 16 | 增加轻量测试脚本和 fixture，覆盖 parser/aggregator | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/tests/fixtures/claude-code-session.jsonl`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/tests/fixtures/codex-session.jsonl`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/scripts/test-parsers.sh` | 0.75d | 7,8,14 |
-| 17 | 端到端验证并清理 `main.swift` 剩余代码 | `/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Sources/CodexUsageWidget/main.swift`<br>`/Users/guomeiqing/Documents/New project 2/codex-usage-widget/Makefile` | 0.5d | 1-16 |
+| 1 | 改造 Makefile，使所有 Swift 文件参与编译 | `/Volumes/ORICO/Projects/MyHelper/Makefile` | 0.25d | 无 |
+| 2 | 创建目录结构与迁移 App 入口/window/hotkey 代码 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/App/MyHelperMain.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/App/AppDelegate.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/App/DesktopWidgetWindow.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/main.swift` | 0.75d | 1 |
+| 3 | 抽取公共 Domain 模型并保持 Codex 兼容 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Domain/AgentRuntime.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Domain/AgentUsageSnapshot.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Domain/UsageModels.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Domain/TaskModels.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Domain/Diagnostics.swift` | 1d | 1 |
+| 4 | 抽取价格、格式化、解析和文件 fingerprint helper | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Domain/Pricing.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Shared/Formatting.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Shared/Localization.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Shared/ParsingHelpers.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/FileFingerprint.swift` | 0.75d | 3 |
+| 5 | 定义 Provider 协议、Registry、Store、Aggregator | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/RuntimeProvider.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/RuntimeProviderRegistry.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/AgentUsageStore.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/AgentUsageAggregator.swift` | 1d | 3,4 |
+| 6 | 迁移 Codex app-server 与 SQLite 读取 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/Codex/CodexRuntimeProvider.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/Codex/CodexAppServerClient.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/Codex/CodexSQLiteReader.swift` | 1d | 5 |
+| 7 | 迁移 Codex session parser、analytics cache、task reader | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/Codex/CodexSessionParser.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/Codex/CodexTaskReader.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/CacheStore.swift` | 1d | 5,6 |
+| 8 | 实现 Claude Code transcript scanner/parser 与 session cache | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/ClaudeCode/ClaudeCodeRuntimeProvider.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/ClaudeCode/ClaudeCodeTranscriptParser.swift` | 1d | 5 |
+| 9 | 实现 Claude Code stats-cache、global state、task reader | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/ClaudeCode/ClaudeCodeStatsCacheReader.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/ClaudeCode/ClaudeCodeGlobalStateReader.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/ClaudeCode/ClaudeCodeTaskReader.swift` | 0.75d | 8 |
+| 10 | 实现 Claude Code statusLine snapshot reader 和 stale 诊断 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Providers/ClaudeCode/ClaudeCodeStatusLineSnapshotReader.swift` | 0.5d | 8 |
+| 11 | 实现状态栏菜单、Runtime 摘要卡片和卡片点击入口 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/StatusBarMenu.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/RuntimeSummaryCard.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/App/AppDelegate.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/RuntimeMenuSummaryBuilder.swift` | 1d | 5,7,8,10 |
+| 12 | 拆分 SwiftUI 视图并接入主界面 Runtime selector | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/UsageWidgetView.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/RuntimeSelector.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/OverviewSection.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/DashboardTabs.swift` | 1d | 5,7,8,11 |
+| 13 | 迁移 dashboard 面板到 runtime-aware 模型 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/UsageTrendPanel.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/ProjectBoardPanel.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/SkillUsagePanel.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/UI/TaskBoardPanel.swift` | 1d | 12 |
+| 14 | 实现 runtime-aware dump JSON 与兼容输出 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/Services/JSONDumpWriter.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/App/MyHelperMain.swift` | 0.5d | 5,7,8 |
+| 15 | 更新产品、安全和研究文档 | `/Volumes/ORICO/Projects/MyHelper/README.md`<br>`/Volumes/ORICO/Projects/MyHelper/README.en.md`<br>`/Volumes/ORICO/Projects/MyHelper/RESEARCH.md`<br>`/Volumes/ORICO/Projects/MyHelper/SECURITY.md` | 0.5d | 8,10,11,14 |
+| 16 | 增加轻量测试脚本和 fixture，覆盖 parser/aggregator | `/Volumes/ORICO/Projects/MyHelper/tests/fixtures/claude-code-session.jsonl`<br>`/Volumes/ORICO/Projects/MyHelper/tests/fixtures/codex-session.jsonl`<br>`/Volumes/ORICO/Projects/MyHelper/scripts/test-parsers.sh` | 0.75d | 7,8,14 |
+| 17 | 端到端验证并清理 `main.swift` 剩余代码 | `/Volumes/ORICO/Projects/MyHelper/Sources/MyHelper/main.swift`<br>`/Volumes/ORICO/Projects/MyHelper/Makefile` | 0.5d | 1-16 |
 
 ### 5.2 风险点
 
 | 风险 | 影响 | 缓解措施 |
 | --- | --- | --- |
 | 单次拆分 6000 行主文件容易引入行为回归 | Codex 现有功能不可用 | 先抽 Domain/Store/Provider 壳，Codex provider 迁移后立即跑 `make probe` 对比 dump |
-| Makefile 多文件编译顺序或 shell glob 不稳定 | 构建失败 | 使用 `find Sources/CodexUsageWidget -name '*.swift' | sort` 生成 `SOURCES` |
+| Makefile 多文件编译顺序或 shell glob 不稳定 | 构建失败 | 使用 `find Sources/MyHelper -name '*.swift' | sort` 生成 `SOURCES` |
 | Claude Code JSONL transcript 包含敏感正文 | 隐私风险 | parser 只匹配 usage/tool metadata key，不保存 content text |
 | Claude Code schema 随版本变化 | 解析失败 | 允许字段缺失，记录 diagnostics；fixture 覆盖常见 shape |
 | 跨 Runtime 额度不可比 | UI 误导 | 主界面只在 Codex/Claude Code 间切换；状态栏只合并今日 token，不合并 quota |
@@ -560,7 +560,7 @@ Claude Code session cache:
 ```sh
 make build
 make probe
-build/codexU.app/Contents/MacOS/codexU --dump-json
+build/MyHelper.app/Contents/MacOS/MyHelper --dump-json
 git diff --check
 ```
 

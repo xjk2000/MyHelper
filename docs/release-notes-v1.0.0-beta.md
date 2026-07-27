@@ -1,6 +1,6 @@
-# codexU v1.0.0-beta02
+# MyHelper v1.0.0-beta02
 
-这是 codexU 从“桌面常驻小组件”升级为标准 macOS App 的 beta 版本。主窗口现在是正常的 macOS 窗口，支持 Dock、系统窗口控制、最小化、关闭后继续在菜单栏运行，并保留菜单栏状态项和快捷键唤起能力。
+这是 MyHelper 从“桌面常驻小组件”升级为标准 macOS App 的 beta 版本。主窗口现在是正常的 macOS 窗口，支持 Dock、系统窗口控制、最小化、关闭后继续在菜单栏运行，并保留菜单栏状态项和快捷键唤起能力。
 
 ## 主要更新
 
@@ -21,8 +21,8 @@
 
 ## 安装包
 
-- Apple Silicon: `codexU-1.0.0-beta02-mac-arm64.dmg`
-- Intel: `codexU-1.0.0-beta02-mac-x86_64.dmg`
+- Apple Silicon: `MyHelper-1.0.0-beta02-mac-arm64.dmg`
+- Intel: `MyHelper-1.0.0-beta02-mac-x86_64.dmg`
 
 ## 校验
 
@@ -33,6 +33,6 @@
 SHA-256:
 
 ```text
-a6368a48c8f1f5c21dd8de6e0155df0bed424a03ef9b21b9a4bc2986126a5c24  codexU-1.0.0-beta02-mac-arm64.dmg
-af3312064e4a4cb371ad7503e716ec4902bff48b27582909e41ef8d8d5e3978a  codexU-1.0.0-beta02-mac-x86_64.dmg
+a6368a48c8f1f5c21dd8de6e0155df0bed424a03ef9b21b9a4bc2986126a5c24  MyHelper-1.0.0-beta02-mac-arm64.dmg
+af3312064e4a4cb371ad7503e716ec4902bff48b27582909e41ef8d8d5e3978a  MyHelper-1.0.0-beta02-mac-x86_64.dmg
 ```

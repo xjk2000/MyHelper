@@ -1,55 +1,28 @@
 # MyHelper
 
-MyHelper is a macOS menu bar and desktop app for tracking OpenAI Codex / ChatGPT Codex and Claude Code quota, token usage, and today's task status. It keeps the information you check most in the menu bar and main window, so you can quickly see remaining quota, reset times, and daily work progress.
+MyHelper is a local macOS menu bar utility for developers. It brings AI coding usage, network risk checks, GitLab CI/CD status, task capture, 2FA, and everyday developer tools into one desktop app.
 
-![MyHelper menu bar runtime popover](docs/screenshot-v1.0.0-beta-menu-popover.png)
+![MyHelper menu bar popover](docs/screenshot-v1.0.0-beta-menu-popover.png)
 
-## Who It Is For
+## What It Does
 
-- Developers who use OpenAI Codex, Codex CLI, or the Codex desktop app every day.
-- Developers who use both Codex and Claude Code and want one local view for both runtimes.
-- ChatGPT Pro / Team users who want a quick view of Codex 5-hour quota, 7-day quota, token usage, and reset times.
-- macOS users who want to check Codex status without repeatedly opening a browser or terminal.
+- **AI usage dashboard**: inspect local Codex and Claude Code tokens, trends, project rankings, tool usage, and task status.
+- **Menu bar status**: check Codex / Claude Code at a glance and open the main window, settings, or tools quickly.
+- **Relay and unofficial endpoint support**: when official quota APIs are unavailable, MyHelper still summarizes local token usage from session records.
+- **Radar and local probes**: show Codex / Claude Code radar information and provide a first local model-capability probe surface.
+- **IP environment checks**: inspect public IP, ASN, ISP, proxy/VPN/Tor/datacenter signals, local interface details, DNS, system proxy, tunnel interfaces, and connectivity to Claude, OpenAI, Gemini, X, Meta, AWS, and more.
+- **VPN usability view**: when a VPN is enabled but you are unsure whether it is safe or usable for Claude/OpenAI/Gemini, MyHelper labels each target as usable, degraded, risky, or unusable.
+- **GitLab tools**: manage GitLab instances, project lists, bulk clone, branch matching, and CI/CD pipeline monitoring.
+- **MindAnchor tasks**: capture local tasks, OCR, speech-to-task, Sprint board, and menu bar task summaries.
+- **Developer toolkit**: JSON editing/formatting/folding, JSON diff, JWT, encoding/decoding, regex, hashes, and related utilities.
+- **2FA authenticator**: manage local TOTP accounts, import otpauth / QR codes, and copy current codes quickly.
 
-## Features
+## Design Principles
 
-- Shows remaining and used Codex quota for the 5-hour and 7-day windows, including reset times.
-- Adds a menu bar runtime menu with separate Codex and Claude Code cards, 5-hour/7-day remaining quota, today's token usage, and total tokens today.
-- Adds a top-level `Codex | Claude Code` switch in the main widget so all panels can switch runtime scope manually.
-- Supports Claude Code local transcript usage, 7-day trends, project rankings, top tools/Skills, and a basic task board.
-- Summarizes token usage for today, the last 7 days, and lifetime totals with uncached input, cached input, and output splits.
-- Estimates the current month's API-equivalent value from OpenAI API token prices and shows progress against Plus, Pro 100, Pro 200, and the full monthly quota value. The bar uses a segmented nonlinear scale, so movement past Pro 200 remains visible and is not a linear dollar ratio.
-- Adds lower dashboard tabs for today's tasks, usage trend, project ranking, and Skill usage.
-- Builds a daily task board from local Codex threads and enabled Codex automations, grouped into active, pending, scheduled, and done columns.
-- Shows a six-month daily token heatmap, a last-7-day trend summary, and previous-period comparison.
-- Shows recent and all-time project rankings with tokens, estimated value, thread counts, and recent activity.
-- Shows top tool calls and top Skill usage to explain the structure of local Codex work.
-- Runs as a standard macOS window with Dock, system window controls, minimization, and a menu bar item that can keep running after the main window is closed.
-- Supports `Command + U` to show or hide the main window. The menu bar runtime menu can also open the main window, open settings, or quit.
-- Includes a Settings window for Chinese/English UI text, system/light/dark appearance, always-on-top behavior, and close-window behavior.
-- Reads data locally and does not upload usage, threads, or account data to a third-party service.
-
-## Keyboard Shortcuts
-
-- `Command + U`: show or hide the main window. If the window is minimized, the shortcut restores it and brings it forward.
-- Menu bar gauge icon: opens the runtime menu. Clicking a Codex or Claude Code card opens the main widget with that runtime selected.
-- Menu bar runtime menu: shows quick Codex / Claude Code status and provides Open, Settings, and Quit actions.
-- Settings window: configure language, appearance, always-on-top behavior, and whether closing the main window keeps the menu bar item running.
-- Main-window refresh button: immediately refresh quota, token usage, trend, and task board.
-- System window controls: close, minimize, or zoom the main window. Quit from the menu bar runtime menu or the app menu.
-
-## First Install: Privacy & Security
-
-MyHelper is distributed outside the Mac App Store. On first launch, macOS may block it until you manually allow it:
-
-1. Open `MyHelper.app` once. If macOS says it cannot be opened, cancel the dialog.
-2. Open **System Settings > Privacy & Security**.
-3. In the **Security** section, click **Open Anyway** for `MyHelper.app`.
-4. Confirm with Touch ID or your password, then click **Open**.
-
-You can also right-click `MyHelper.app` in Finder and choose **Open**, then confirm the same security prompt.
-
-MyHelper needs access to local Codex data under `~/.codex/`. When Claude Code stats are used, it also reads local transcripts, tasks, and status cache files under `~/.claude/`. If macOS asks for file or folder access, allow it so the widget can read local usage, threads, and automation metadata.
+- **Local first**: usage, threads, tokens, account-related files, and secrets stay on the machine whenever possible.
+- **Fast status reading**: the UI is optimized for answering “can I use this now?”, “what changed?”, and “what is risky?”.
+- **Plugin-style tools**: AI usage is one surface; GitLab, IP checks, 2FA, MindAnchor, and developer utilities are separate tools.
+- **Official and relay modes both matter**: unavailable official usage APIs should not make local traffic invisible.
 
 ## Install
 
@@ -58,19 +31,34 @@ Download the DMG for your Mac architecture from GitHub Releases:
 - Apple Silicon: `MyHelper-<version>-mac-arm64.dmg`
 - Intel: `MyHelper-<version>-mac-x86_64.dmg`
 
+Steps:
+
 1. Open the DMG.
-2. Drag `MyHelper.app` into the `Applications` folder.
+2. Drag `MyHelper.app` into `Applications`.
 3. Open MyHelper from `Applications`.
-4. Complete the **First Install: Privacy & Security** steps above if macOS blocks the first launch.
+4. If macOS blocks the first launch, open **System Settings > Privacy & Security** and choose **Open Anyway**.
+
+You can also right-click `MyHelper.app` in Finder, choose **Open**, and confirm the system prompt.
 
 ## Requirements
 
 - macOS 14 or later.
-- A local Codex installation.
-- A signed-in Codex account for quota data.
-- Codex must have been used at least once so `~/.codex/state_5.sqlite` exists.
-- Claude Code support is optional. Historical tokens come from `~/.claude/projects/**/*.jsonl`; quota requires a local statusLine snapshot cache.
 - Xcode Command Line Tools for building from source.
+- Codex / Claude Code usage features require local data from those tools.
+- GitLab features require user-configured GitLab hosts and Personal Access Tokens; tokens are stored locally in Keychain.
+- 2FA data is local and should never be committed to the repository.
+
+## Data Sources
+
+MyHelper may read these local or user-configured sources:
+
+- Codex: `codex app-server`, `~/.codex/state_5.sqlite`, `~/.codex/sessions/**/*.jsonl`, `~/.codex/automations/**/automation.toml`.
+- Claude Code: `~/.claude/projects/**/*.jsonl`, `~/.claude/tasks/**/*.json`, and optional local usage/statusline cache files.
+- GitLab: user-configured GitLab APIs, without bundled tokens.
+- IP environment: public IP lookup services, local network configuration, and HTTPS connectivity probes.
+- 2FA: user-selected local TOTP storage or Keychain.
+
+MyHelper is not an official product of OpenAI, Anthropic, GitLab, Google, Meta, X, or AWS.
 
 ## Build From Source
 
@@ -78,7 +66,7 @@ Download the DMG for your Mac architecture from GitHub Releases:
 make build
 ```
 
-Run the app:
+Run:
 
 ```sh
 make run
@@ -90,19 +78,25 @@ Install to `/Applications`:
 make install
 ```
 
-Inspect the data source output:
+Inspect local data output:
 
 ```sh
 make probe
 ```
 
-## Package A DMG
+Development run script:
+
+```sh
+./script/build_and_run.sh --verify
+```
+
+## Package
 
 ```sh
 make release
 ```
 
-`make release` builds a DMG for the current build machine architecture. You can also build explicit Mac architectures:
+Explicit architectures:
 
 ```sh
 make release-arm64
@@ -110,56 +104,33 @@ make release-intel
 make release-all
 ```
 
-Release artifacts are written to `dist/`, for example:
+Artifacts are written to `dist/`. See [DISTRIBUTION.md](DISTRIBUTION.md) for Developer ID signing and notarization.
 
-```text
-dist/MyHelper-1.0.0-beta02-mac-arm64.dmg
-dist/MyHelper-1.0.0-beta02-mac-arm64.dmg.sha256
-dist/MyHelper-1.0.0-beta02-mac-x86_64.dmg
-dist/MyHelper-1.0.0-beta02-mac-x86_64.dmg.sha256
-```
+## Privacy And Security
 
-For Developer ID signing and notarization, see [DISTRIBUTION.md](DISTRIBUTION.md).
-
-## Data Sources
-
-- Account and quota: `codex app-server` JSON-RPC methods `account/read`, `account/rateLimits/read`, and `account/usage/read`.
-- Local token totals: `~/.codex/state_5.sqlite`.
-- Detailed token splits: `token_count` events in `~/.codex/sessions/**/rollout-*.jsonl` and `~/.codex/archived_sessions/*.jsonl`.
-- Today's board: unarchived and archived Codex threads in the local SQLite database.
-- Usage trends and project rankings: aggregated from local session `token_count` events, with an approximate thread-updated-time fallback when detailed events are unavailable.
-- Tool and Skill usage: tool call and Skill load records parsed from local session events.
-- Scheduled tasks: enabled automation metadata under `~/.codex/automations/**/automation.toml`.
-- Claude Code historical tokens: assistant `message.usage` fields in `~/.claude/projects/**/*.jsonl`.
-- Claude Code tools, Skills, and tasks: transcript `tool_use.name` / explicit Skill attribution, plus `~/.claude/tasks/**/*.json`.
-- Claude Code active quota: optional `~/Library/Caches/MyHelper/claude-code/statusline-snapshot.json`; without it, 5-hour and 7-day quota show `--`.
-
-Current Codex quota APIs expose rolling-window percentages and reset times, not absolute account quota sizes. Claude Code support reads local history and an optional active snapshot; it is not a Claude.ai official billing view. See [RESEARCH.md](RESEARCH.md) for the data model and fallback behavior.
+- The repository does not include API keys, GitLab tokens, OAuth tokens, 2FA secrets, or account data.
+- Sensitive configuration is stored locally through Keychain or user-selected local storage.
+- Codex / Claude Code content is not uploaded; analytics read structured fields such as usage, model names, tool names, and project paths.
+- `.gitignore` excludes `.env`, account JSON, credential JSON, token/secret files, local databases, logs, build outputs, and signing artifacts.
 
 ## FAQ
 
-### Is MyHelper an official OpenAI product?
+### Is MyHelper an official product?
 
-No. MyHelper is an unofficial local macOS utility for reading local Codex app-server responses and local `~/.codex/` data.
+No. MyHelper is an unofficial local macOS developer utility.
 
-### Does MyHelper upload my Codex threads or usage data?
+### Why can MyHelper show tokens when official usage is unavailable?
 
-No. MyHelper reads Codex quota, local SQLite usage, and automation metadata locally. It does not upload that data to a third-party service.
+Official usage and local session statistics are separate paths. MyHelper uses local session records for traffic analysis when official quota data is unavailable.
 
-### Why does MyHelper show remaining percentage instead of absolute quota?
+### Can IP environment checks guarantee account safety?
 
-The current local Codex API exposes rolling-window usage percentages and reset times, not absolute quota sizes. MyHelper therefore shows remaining percentages for the 5-hour and 7-day windows.
+No. They only report visible network signals such as VPN/proxy/Tor/datacenter IPs, region mismatch, unreachable services, and timezone inconsistency. Final risk decisions belong to each platform.
 
 ### Does MyHelper support Intel Macs?
 
-Yes. Intel Macs should use `MyHelper-<version>-mac-x86_64.dmg`. From source, package it with `make release-intel`, or override `TARGET_TRIPLE="x86_64-apple-macos14.0"` from a compatible toolchain.
+Yes. Intel Macs should use `MyHelper-<version>-mac-x86_64.dmg`; source builds can use `make release-intel`.
 
 ## License
 
 MIT. See [LICENSE](LICENSE).
-
-## WeChat Official Account
-
-Scan the QR code to follow my WeChat official account for AI tools, Codex usage notes, and independent product building.
-
-<img src="docs/wechat-official-account-qr.png" alt="WeChat official account QR code" width="220" />

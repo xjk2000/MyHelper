@@ -39,7 +39,7 @@
 - `rate_limits.five_hour` 与 `rate_limits.seven_day` 提供 `used_percentage` 和 `resets_at`，但字段可能在首次 API 响应前缺失，且仅对 Claude.ai 订阅用户有效。
 - OpenTelemetry 指标支持 `claude_code.token.usage`、`claude_code.cost.usage`、session、lines of code、PR、commit、tool decision 等维度。
 
-## 对 codexU 的影响
+## 对 MyHelper 的影响
 
 ### 可复刻 Codex 能力
 

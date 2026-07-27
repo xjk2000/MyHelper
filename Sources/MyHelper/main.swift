@@ -2731,7 +2731,7 @@ struct UsageWidgetView: View {
                 }
 
                 if hasOfficialQuota {
-                    WoolProgressCard(usage: snapshot.local?.detailedUsage?.month, language: language)
+                    SubscriptionValueProgressCard(usage: snapshot.local?.detailedUsage?.month, language: language)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -4201,7 +4201,7 @@ private let quotaValueWeightedPricePerMillion =
 private let quotaValueMonthlyTokenLimit = quotaValueDailyTokenLimit * quotaValueBillingDays
 private let quotaValueMonthlyMaxUSD = quotaValueMonthlyTokenLimit / 1_000_000 * quotaValueWeightedPricePerMillion
 
-struct WoolProgressCard: View {
+struct SubscriptionValueProgressCard: View {
     let usage: PricedTokenUsage?
     let language: WidgetLanguage
 
@@ -4226,7 +4226,7 @@ struct WoolProgressCard: View {
                 Image(systemName: cost >= 20 ? "chart.line.uptrend.xyaxis" : "target")
                     .font(.system(size: 12, weight: .bold))
                     .foregroundStyle(accent)
-                Text(language.text("羊毛进度", "Value progress"))
+                Text(language.text("订阅价值", "Value progress"))
                     .font(.system(size: 12, weight: .semibold))
                 Spacer(minLength: 8)
                 Text(formatUSD(usage?.estimatedCostUSD))

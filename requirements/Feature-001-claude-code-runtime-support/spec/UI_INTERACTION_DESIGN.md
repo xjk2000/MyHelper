@@ -6,7 +6,7 @@
 
 ## 1. 设计目标
 
-本次新增 Claude Code 支持后，codexU 需要从“打开主窗口后查看 Codex”调整为“两级使用体验”：
+本次新增 Claude Code 支持后，MyHelper 需要从“打开主窗口后查看 Codex”调整为“两级使用体验”：
 
 - 状态栏菜单用于快速扫视：不打开大窗口，也能看到 Codex 与 Claude Code 的关键剩余额度和今日 token。
 - 主界面用于深入分析：点击某个 Runtime 卡片后打开当前主窗口，并默认进入对应 Runtime 的详情视图。
@@ -23,11 +23,11 @@
 
 ### 2.1 状态栏菜单
 
-触发方式：点击 macOS 状态栏里的 codexU 图标。
+触发方式：点击 macOS 状态栏里的 MyHelper 图标。
 
 菜单内容从上到下：
 
-1. Header：`codexU`、最后刷新时间、刷新按钮。
+1. Header：`MyHelper`、最后刷新时间、刷新按钮。
 2. Runtime 卡片区：
    - Codex 卡片。
    - Claude Code 卡片。
@@ -156,7 +156,7 @@ sequenceDiagram
 设计说明：
 
 - 点击状态栏图标后先出现轻量 popover，而不是直接打开主窗口。
-- Codex 和 Claude Code 使用两张独立卡片，卡片层级、圆角和毛玻璃材质沿用当前 codexU 卡片语言。
+- Codex 和 Claude Code 使用两张独立卡片，卡片层级、圆角和毛玻璃材质沿用当前 MyHelper 卡片语言。
 - 5 小时和 7 日额度在卡片内并列展示，使用数值 + 细进度条，支持缺失时显示 `--`。
 - Claude Code 没有 active statusLine snapshot 时，状态 chip 使用“需要快照”，额度栏保留位置，避免刷新后布局跳动。
 - 今日总 token 使用独立汇总条，明确这是可聚合指标；额度百分比不在这里聚合。
@@ -170,7 +170,7 @@ sequenceDiagram
 
 - 主界面保持现有桌面小组件布局，不重做视觉系统。
 - Header 中新增 `Codex | Claude Code` segmented control，位置在产品名与语言/主题/刷新操作之间，属于全局数据范围控制。
-- 选中 Codex 时，额度环、今日/近 7 天/累计卡片、羊毛进度、下方 dashboard 全部读取 Codex runtime snapshot。
+- 选中 Codex 时，额度环、今日/近 7 天/累计卡片、订阅价值估算、下方 dashboard 全部读取 Codex runtime snapshot。
 - 从状态栏点击 Claude Code 卡片进入时，segmented control 默认切到 Claude Code，并同步切换主面板数据。
 - 宽度不足时，Runtime selector 可以下沉为 header 第二行，不能挤压刷新、关闭、语言和主题控件。
 
@@ -221,7 +221,7 @@ Claude Code quota 不可用时：
 推荐放在 header 第二行或 header 右侧、刷新按钮左侧：
 
 ```text
-codexU                         [Codex | Claude Code] [中|EN] [主题] [刷新]
+MyHelper                         [Codex | Claude Code] [中|EN] [主题] [刷新]
 ```
 
 如果宽度不足，Runtime selector 独占 header 下方一行，保持按钮不挤压。
