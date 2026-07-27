@@ -1,0 +1,34 @@
+# Contributing
+
+Thanks for helping improve MyHelper.
+
+## Development
+
+Build the app:
+
+```sh
+make build
+```
+
+Run locally:
+
+```sh
+make run
+```
+
+Check the local data reader:
+
+```sh
+make probe
+```
+
+## Pull Requests
+
+- Keep changes focused on one bug fix or feature.
+- Run `make build` before opening a pull request.
+- Update `README.md` or `DISTRIBUTION.md` when behavior, installation, permissions, or packaging changes.
+- Avoid committing local build outputs from `build/` or `dist/`.
+
+## Privacy
+
+MyHelper reads local Codex files from `~/.codex/`. Do not include real account data, thread titles, local paths, screenshots with private task names, or local SQLite data in issues or pull requests.

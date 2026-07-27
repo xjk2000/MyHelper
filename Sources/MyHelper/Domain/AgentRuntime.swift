@@ -1,0 +1,148 @@
+import Foundation
+
+enum RuntimeScope: String, CaseIterable, Identifiable, Codable, Equatable {
+    case codex
+    case claudeCode
+
+    var id: String { rawValue }
+
+    static func storedIdentifier(_ value: String) -> RuntimeScope? {
+        let normalized = value.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        return allCases.first { scope in
+            scope.rawValue.lowercased() == normalized || scope.runtimeId.lowercased() == normalized
+        }
+    }
+
+    var runtimeId: String {
+        switch self {
+        case .codex:
+            return "codex"
+        case .claudeCode:
+            return "claude-code"
+        }
+    }
+
+    var displayName: String {
+        switch self {
+        case .codex:
+            return "Codex"
+        case .claudeCode:
+            return "Claude Code"
+        }
+    }
+}
+
+enum RuntimeMenuStatus: String, Codable, Equatable {
+    case available
+    case localOnly
+    case snapshotNeeded
+    case stale
+    case unavailable
+
+    func localized(_ language: WidgetLanguage) -> String {
+        switch self {
+        case .available:
+            return language.text("可用", "Available")
+        case .localOnly:
+            return language.text("本机流量", "Local traffic")
+        case .snapshotNeeded:
+            return language.text("需要快照", "Snapshot needed")
+        case .stale:
+            return language.text("快照过期", "Stale")
+        case .unavailable:
+            return language.text("暂不可用", "Unavailable")
+        }
+    }
+}
+
+struct RuntimeMenuSummary: Identifiable, Equatable {
+    let scope: RuntimeScope
+    let displayName: String
+    let status: RuntimeMenuStatus
+    let fiveHourRemainingPercent: Double?
+    let fiveHourResetsAt: Date?
+    let sevenDayRemainingPercent: Double?
+    let sevenDayResetsAt: Date?
+    let todayTokens: Int64?
+    let sourceLabel: String
+
+    var id: String { scope.runtimeId }
+}
+
+struct RuntimeUsageSnapshot: Identifiable, Equatable {
+    let scope: RuntimeScope
+    let snapshot: UsageSnapshot
+    let status: RuntimeMenuStatus
+    let quotaSourceLabel: String
+    let usageSourceLabel: String
+
+    var id: String { scope.runtimeId }
+    var displayName: String { scope.displayName }
+
+    var todayTokens: Int64? {
+        snapshot.local?.todayTokens
+    }
+
+    var summary: RuntimeMenuSummary {
+        RuntimeMenuSummary(
+            scope: scope,
+            displayName: displayName,
+            status: status,
+            fiveHourRemainingPercent: snapshot.primary?.remainingPercent,
+            fiveHourResetsAt: snapshot.primary?.resetsAt,
+            sevenDayRemainingPercent: snapshot.secondary?.remainingPercent,
+            sevenDayResetsAt: snapshot.secondary?.resetsAt,
+            todayTokens: todayTokens,
+            sourceLabel: quotaSourceLabel
+        )
+    }
+
+    func replacingTaskBoard(_ taskBoard: TaskBoard?) -> RuntimeUsageSnapshot {
+        RuntimeUsageSnapshot(
+            scope: scope,
+            snapshot: snapshot.replacingTaskBoard(taskBoard),
+            status: status,
+            quotaSourceLabel: quotaSourceLabel,
+            usageSourceLabel: usageSourceLabel
+        )
+    }
+}
+
+struct MultiRuntimeUsageSnapshot: Equatable {
+    let refreshedAt: Date
+    let runtimes: [RuntimeUsageSnapshot]
+    let aggregate: UsageSnapshot
+
+    static let empty = MultiRuntimeUsageSnapshot(
+        refreshedAt: Date(),
+        runtimes: [],
+        aggregate: .empty
+    )
+
+    var totalTodayTokens: Int64 {
+        runtimes.reduce(Int64(0)) { total, runtime in
+            total + (runtime.todayTokens ?? 0)
+        }
+    }
+
+    func runtime(for scope: RuntimeScope) -> RuntimeUsageSnapshot? {
+        runtimes.first { $0.scope == scope }
+    }
+
+    func displaySnapshot(for scope: RuntimeScope) -> UsageSnapshot {
+        runtime(for: scope)?.snapshot ?? runtimes.first?.snapshot ?? aggregate
+    }
+
+    func defaultScope(preferred: RuntimeScope, allowedScopes: [RuntimeScope] = RuntimeScope.allCases) -> RuntimeScope {
+        let allowed = allowedScopes.isEmpty ? RuntimeScope.allCases : allowedScopes
+        if allowed.contains(preferred), runtime(for: preferred) != nil {
+            return preferred
+        }
+        if let available = allowed.first(where: { scope in
+            runtime(for: scope)?.status != .unavailable
+        }) {
+            return available
+        }
+        return allowed.first ?? preferred
+    }
+}
