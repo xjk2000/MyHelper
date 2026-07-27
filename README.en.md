@@ -2,7 +2,19 @@
 
 MyHelper is a local macOS menu bar utility for developers. It brings AI coding usage, network risk checks, GitLab CI/CD status, task capture, 2FA, and everyday developer tools into one desktop app.
 
-![MyHelper menu bar popover](docs/screenshot-v1.0.0-beta-menu-popover.png)
+## Preview
+
+The menu bar popover keeps AI usage, 2FA, GitLab CI/CD, and common actions in a compact panel:
+
+<img src="docs/screenshot-myhelper-menu-popover.png" alt="MyHelper menu bar popover" width="360">
+
+The main window shows local Codex / Claude Code usage, trends, project rankings, radar, and local probes:
+
+<img src="docs/screenshot-myhelper-main-dashboard.png" alt="MyHelper main window" width="900">
+
+The IP environment tool checks the current exit network, VPN/proxy route, and connectivity to sensitive platforms:
+
+<img src="docs/screenshot-myhelper-ip-environment.png" alt="MyHelper IP environment" width="900">
 
 ## What It Does
 

@@ -4,7 +4,19 @@
 
 MyHelper 是一个面向开发者的 macOS 菜单栏工具。它把 AI 编程助手用量、网络风控检测、GitLab CI/CD、任务捕获、2FA 和常用研发小工具放到一个本地应用里，目标很简单：少开几个窗口，少猜一点状态，把每天真正需要看的东西放到手边。
 
-![MyHelper 菜单栏浮窗](docs/screenshot-v1.0.0-beta-menu-popover.png)
+## 界面预览
+
+菜单栏浮窗会把 AI 用量、2FA、GitLab CI/CD 和常用入口放在一个轻量面板里：
+
+<img src="docs/screenshot-myhelper-menu-popover.png" alt="MyHelper 菜单栏浮窗" width="360">
+
+主窗口用于查看 Codex / Claude Code 的本机用量、趋势、项目排行、雷达和本地探针：
+
+<img src="docs/screenshot-myhelper-main-dashboard.png" alt="MyHelper 主窗口" width="900">
+
+IP 环境检测用于判断当前出口网络、VPN/代理路径和关键平台连通状态：
+
+<img src="docs/screenshot-myhelper-ip-environment.png" alt="MyHelper IP 环境检测" width="900">
 
 ## 它能做什么
 
